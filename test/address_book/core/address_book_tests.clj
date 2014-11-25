@@ -9,11 +9,11 @@
 (def test-db (database :test))
 
 (facts "Example GET and POST tests"
-       (with-state-changes [(before :facts (query/create-contacts-table-if-not-exists! {} {:connection test-db}))
-                            (after :facts (query/drop-contacts-table! {} {:connection test-db}))]
+       (with-state-changes [(before :facts (query/create-contacts-table-if-not-exists! {} {:connection db}))
+                            (after :facts (query/drop-contacts-table! {} {:connection db}))]
 
          (fact "Test GET"
-               (with-redefs [db test-db]
+               (with-redefs [test-db db]
                  (query/insert-contact<! {:name "JT" :phone "(321)" :email "JT@JT.com"} {:connecion test-db})
                  (query/insert-contact<! {:name "Utah" :phone "(432)" :email "J@Buckeyes.com"} {:connecion test-db})
                  (let [response (app (mock/request :get "/"))]
@@ -22,7 +22,7 @@
                    (:body response) => (contains "<div class=\"column-1\">Utah</div>"))))
 
          (fact "Test POST"
-               (with-redefs [db test-db]
+               (with-redefs [test-db db]
                  (count (query/all-contacts {} {:connection test-db})) => 0
                  (let [response (app (mock/request :post "/post" {:name "Some Guy" :phone "(321)" :email "a@a.com"}))]
                    (:status response) => 302
