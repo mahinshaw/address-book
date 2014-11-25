@@ -1,15 +1,25 @@
 (ns address-book.core.routes.address-book-routes
-  (:require [compojure.core :refer [defroutes GET POST]]
-            [address-book.core.views.address-book-layout :refer [common-layout]]))
+  (:require [ring.util.response :as response]
+            [compojure.core :refer [defroutes GET POST]]
+            [address-book.core.views.address-book-layout :refer [common-layout
+                                                                 read-contact
+                                                                 add-contact-form]]
+            [address-book.core.models.database :refer [db]]
+            [address-book.core.models.query-defs :as query]))
 
-(defn example-post [request]
-  (let [post-value (get-in request [:params :example-post])]
-    (str "You posted: " post-value)))
+(defn post-route [request]
+  (let [name (get-in request [:params :name])
+        phone (get-in request [:params :phone])
+        email (get-in request [:params :email])]
+    (query/insert-contact<! {:name name :phone phone :email email} {:connection db})
+    (response/redirect "/")))
 
-(defn example-get [request]
+(defn get-route [request]
   (common-layout
-   [:p "Example GET"]))
+   (for [contact (query/all-contacts {} {:connection db})]
+     (read-contact contact))
+   (add-contact-form)))
 
 (defroutes address-book-routes
-  (GET "/" [] example-get)
-  (POST "/post" [] example-post))
+  (GET "/" [] get-route)
+  (POST "/post" [] post-route))
