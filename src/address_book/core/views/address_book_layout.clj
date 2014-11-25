@@ -7,18 +7,18 @@
    [:head
     [:title "Address Book"]
     (include-css "/css/address-book.css")
-    (include-css "http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css")]
+    (include-css "http://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css")]
    [:body
     [:div#wrapper
      [:h1#content-title "Address Book"]
      [:div#contacts
       [:div.contact.header
        [:div.column-1
-        [:i.icon-user.icon-style] " Name"]
+        [:i.fa.fa-user.fa-style] " Name"]
        [:div.column-2
-        [:i.icon-phone.icon-style] " Phone"]
+        [:i.fa.fa-phone.fa-style] " Phone"]
        [:div.column-3
-        [:i.icon-envelope.icon-style] " Email"]
+        [:i.fa.fa-envelope.fa-style] " Email"]
        [:div.clear-row]]
       body]]]))
 
@@ -45,10 +45,10 @@
     [:div.button-group
      [:form {:action (str "/edit/" (h (:id contact))) :method "get"}
       [:button.button.edit {:type "submit"}
-       [:i.icon-pencil]]]
+       [:i.fa.fa-pencil]]]
      [:form {:action (str "/delete/" (h (:id contact))) :method "post"}
       [:button.button.remove {:type "submit"}
-       [:i.icon-remove]]]]
+       [:i.fa.fa-remove]]]]
     [:div.clear-row]]))
 
 (defn edit-contact [contact]
