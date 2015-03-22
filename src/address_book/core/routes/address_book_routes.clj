@@ -21,7 +21,7 @@
     (response/redirect "/")))
 
 (defn get-route [request]
-  (let [contact-id (get-in request [:param :contact-id])]
+  (let [contact-id (get-in request [:params :contact-id])]
     (common-layout
      (for [contact (query/all-contacts {} {:connection db})]
        (display-contact contact contact-id))
